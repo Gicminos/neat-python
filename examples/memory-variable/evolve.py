@@ -20,6 +20,8 @@ max_ignore = 2
 # Number of random examples each network is tested against.
 num_tests = 2 ** (max_inputs + max_ignore + 1)
 
+nw = neat.nn.MLRecurrentNetwork
+
 
 def test_network(net, input_sequence, num_ignore):
     # Feed input bits to the network with the record bit set enabled and play bit disabled.
@@ -43,7 +45,7 @@ def test_network(net, input_sequence, num_ignore):
 
 
 def eval_genome(genome, config):
-    net = neat.nn.RecurrentNetwork.create(genome, config)
+    net = nw.create(genome, config)
 
     error = 0.0
     for _ in range(num_tests):
@@ -89,8 +91,7 @@ def run():
     # Show output of the most fit genome against a random input.
     print('\nBest genome:\n{!s}'.format(winner))
     print('\nOutput:')
-    winner_net = neat.nn.RecurrentNetwork.create(winner, config)
-    num_correct = 0
+    winner_net = nw.create(winner, config)
     for n in range(num_tests):
         print('\nRun {0} output:'.format(n))
 
