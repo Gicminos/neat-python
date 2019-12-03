@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/CodeReclaimers/neat-python.svg)](https://travis-ci.org/CodeReclaimers/neat-python)
-[![Coverage Status](https://coveralls.io/repos/CodeReclaimers/neat-python/badge.svg?branch=master&service=github)](https://coveralls.io/github/CodeReclaimers/neat-python?branch=master)
+[![Build Status](https://travis-ci.org/Gicminos/neat-python.svg)](https://travis-ci.org/Gicminos/neat-python)
+[![Coverage Status](https://coveralls.io/repos/Gicminos/neat-python/badge.svg?branch=master&service=github)](https://coveralls.io/github/Gicminos/neat-python?branch=master)
 
 ## STATUS NOTE ##
 
