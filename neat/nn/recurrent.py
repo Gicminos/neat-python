@@ -1,6 +1,4 @@
 from neat.graphs import required_for_output, feed_forward_layers
-from neat.six_util import itervalues, iteritems
-
 
 class RecurrentNetwork(object):
     def __init__(self, inputs, outputs, node_evals):
@@ -122,7 +120,7 @@ class MLRecurrentNetwork(object):
     def create(genome, config):
         """ Receives a genome and returns its phenotype (a MLRecurrentNetwork). """
         genome_config = config.genome_config
-        connections = [cg.key for cg in itervalues(genome.connections) if cg.enabled]
+        connections = [cg.key for cg in genome.connections.values() if cg.enabled]
 
         layers = \
             feed_forward_layers(config.genome_config.input_keys, config.genome_config.output_keys, connections, True)

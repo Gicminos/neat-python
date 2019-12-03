@@ -12,7 +12,6 @@ from neat.activations import ActivationFunctionSet
 from neat.attributes import FloatAttribute, BoolAttribute, StringAttribute
 from neat.config import ConfigParameter, write_pretty_params
 from neat.genes import BaseGene
-from neat.six_util import iteritems, iterkeys
 
 import visualize
 
@@ -122,7 +121,7 @@ class CircuitGenome(object):
             parent1, parent2 = genome2, genome1
 
         # Inherit connection genes
-        for key, cg1 in iteritems(parent1.connections):
+        for key, cg1 in parent1.connections.items():
             cg2 = parent2.connections.get(key)
             if cg2 is None:
                 # Excess or disjoint gene: copy from the fittest parent.
@@ -135,7 +134,7 @@ class CircuitGenome(object):
         parent1_set = parent1.nodes
         parent2_set = parent2.nodes
 
-        for key, ng1 in iteritems(parent1_set):
+        for key, ng1 in parent1_set.items():
             ng2 = parent2_set.get(key)
             assert key not in self.nodes
             if ng2 is None:
@@ -182,7 +181,7 @@ class CircuitGenome(object):
         Attempt to add a new connection, the only restriction being that the output
         node cannot be one of the network input pins.
         """
-        possible_outputs = list(iterkeys(self.nodes))
+        possible_outputs = list(self.nodes)
         out_node = choice(possible_outputs)
 
         possible_inputs = possible_outputs + config.input_keys
@@ -201,14 +200,14 @@ class CircuitGenome(object):
 
     def mutate_delete_node(self, config):
         # Do nothing if there are no non-output nodes.
-        available_nodes = [(k, v) for k, v in iteritems(self.nodes) if k not in config.output_keys]
+        available_nodes = [(k, v) for k, v in self.nodes.items() if k not in config.output_keys]
         if not available_nodes:
             return -1
 
         del_key, del_node = choice(available_nodes)
 
         connections_to_delete = set()
-        for k, v in iteritems(self.connections):
+        for k, v in self.connections.items():
             if del_key in v.key:
                 connections_to_delete.add(v.key)
 
@@ -234,11 +233,11 @@ class CircuitGenome(object):
         node_distance = 0.0
         if self.nodes or other.nodes:
             disjoint_nodes = 0
-            for k2 in iterkeys(other.nodes):
+            for k2 in other.nodes:
                 if k2 not in self.nodes:
                     disjoint_nodes += 1
 
-            for k1, n1 in iteritems(self.nodes):
+            for k1, n1 in self.nodes.items():
                 n2 = other.nodes.get(k1)
                 if n2 is None:
                     disjoint_nodes += 1
@@ -253,11 +252,11 @@ class CircuitGenome(object):
         connection_distance = 0.0
         if self.connections or other.connections:
             disjoint_connections = 0
-            for k2 in iterkeys(other.connections):
+            for k2 in other.connections:
                 if k2 not in self.connections:
                     disjoint_connections += 1
 
-            for k1, c1 in iteritems(self.connections):
+            for k1, c1 in self.connections.items():
                 c2 = other.connections.get(k1)
                 if c2 is None:
                     disjoint_connections += 1
@@ -279,7 +278,7 @@ class CircuitGenome(object):
 
     def __str__(self):
         s = "Nodes:"
-        for k, ng in iteritems(self.nodes):
+        for k, ng in self.nodes.items():
             s += "\n\t{0} {1!s}".format(k, ng)
         s += "\nConnections:"
         connections = list(self.connections.values())
@@ -301,7 +300,7 @@ class CircuitGenome(object):
             self.nodes[node_key] = self.create_node(config, node_key)
 
         for input_id in config.input_keys:
-            for node_id in iterkeys(self.nodes):
+            for node_id in self.nodes:
                 connection = self.create_connection(config, input_id, node_id)
                 self.connections[connection.key] = connection
 
@@ -343,7 +342,7 @@ def create_circuit(genome, config):
     #circuit.R('test2', 'node0', 'input1', 1e6)
     ridx = 1
     xidx = 1
-    for key, c in iteritems(genome.connections):
+    for key, c in genome.connections.items():
         if c.component == 'resistor':
             pin0, pin1 = get_pins(key)
             R = 10 ** c.value
