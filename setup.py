@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='neat-python-gicminos',
-    version='0.93',
+    version='0.95',
     author='cesar.gomes, mirrorballu2',
     author_email='nobody@nowhere.com',
     maintainer='Gicminos, LLC',
