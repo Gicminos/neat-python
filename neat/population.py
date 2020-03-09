@@ -4,6 +4,7 @@ from __future__ import print_function
 from neat.math_util import mean
 from neat.reporting import ReporterSet
 
+import copy
 
 class CompleteExtinctionException(Exception):
     pass
@@ -99,7 +100,7 @@ class Population(object):
 
             # Track the best genome ever seen.
             if self.best_genome is None or best.fitness > self.best_genome.fitness:
-                self.best_genome = best
+                self.best_genome = copy.copy(best)
 
             if not self.config.no_fitness_termination:
                 # End if the fitness threshold is reached.
